@@ -135,7 +135,8 @@ export default {
               this.loginForm
             );
             this.$message.success(res.message);
-            this.$router.replace("/");
+            // 拿到刚刚退出登录是，回传的未遂地址的路径
+            this.$router.replace(this.$route.query.redirect || "/");
           } catch (err) {
             console.log(err);
           }

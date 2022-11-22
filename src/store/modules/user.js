@@ -1,4 +1,4 @@
-import { loginAPI, getUserInfoAPI } from "@/api/user";
+import { loginAPI, getUserInfoAPI, getUserPhotoAPI } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import { resetRouter } from "@/router";
 
@@ -44,7 +44,9 @@ const actions = {
   // 获取用户信息
   async getUserInfoActions({ commit, state }) {
     const res = await getUserInfoAPI();
-    commit("SET_USER", res.data);
+    const res2 = await getUserPhotoAPI(res.data.userId);
+    console.log(res2);
+    commit("SET_USER", { ...res.data, ...res2.data });
   },
 
   // 封装-退出登录逻辑

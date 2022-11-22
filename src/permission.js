@@ -2,7 +2,7 @@ import router from "./router";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import store from "@/store";
-
+import getPageTitle from "@/utils/get-page-title";
 NProgress.configure({
   showSpinner: false,
 }); // NProgress Configuration
@@ -35,5 +35,6 @@ router.beforeEach(async (to, from, next) => {
 
 // 正常next()放行了跳转了，才会走后置守卫，关闭正常流程进度条
 router.afterEach((to, from, next) => {
+  document.title = getPageTitle(to.meta.title);
   NProgress.done();
 });
