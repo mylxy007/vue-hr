@@ -15,6 +15,9 @@ import router from "./router";
 import "@/icons"; // icon
 import "@/permission"; // permission control
 
+// 全局注册组件
+import Global from "@/components";
+Vue.use(Global);
 // Vue.use(ElementUI, {
 //   locale,
 // });

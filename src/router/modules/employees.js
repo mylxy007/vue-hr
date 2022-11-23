@@ -9,5 +9,12 @@ export default {
       component: () => import("@/views/employees"),
       meta: { title: "员工", icon: "people" },
     },
+    {
+      path: "detail",
+      name: "employeesDetail",
+      component: () => import("@/views/employees/detail.vue"),
+      hidden: true,
+      meta: { title: "员工详情", icon: "people" },
+    },
   ],
 };

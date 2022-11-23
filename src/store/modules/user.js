@@ -45,7 +45,6 @@ const actions = {
   async getUserInfoActions({ commit, state }) {
     const res = await getUserInfoAPI();
     const res2 = await getUserPhotoAPI(res.data.userId);
-    console.log(res2);
     commit("SET_USER", { ...res.data, ...res2.data });
   },
 

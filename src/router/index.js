@@ -57,6 +57,16 @@ export const constantRoutes = [
     redirect: "/404",
     hidden: true,
   },
+  {
+    path: "/excel",
+    component: Layout,
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/excel"),
+      },
+    ],
+  },
 ];
 
 const createRouter = () =>

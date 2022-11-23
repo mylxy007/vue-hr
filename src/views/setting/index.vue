@@ -177,7 +177,7 @@ export default {
       isEdit: false,
     };
   },
-  mounted() {
+  created() {
     this.getRoleListFn();
     this.getCompanyInfoFn();
   },
