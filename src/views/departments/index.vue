@@ -14,7 +14,7 @@
                 <!-- 第一列20份 -->
                 <el-col :span="20">
                   <i class="el-icon-s-home" />
-                  <span class="company">江苏传智播客教育科技股份有限公司</span>
+                  <span class="company">{{ $t("navbar.companyName") }}</span>
                 </el-col>
                 <!-- 第二列4份 -->
                 <el-col :span="4">

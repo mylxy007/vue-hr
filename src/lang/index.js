@@ -20,7 +20,7 @@ const i18n = new VueI18n({
         hello: "hello world",
       },
       navbar: {
-        companyName: "Jiangsu Chuanzhi podcast Education Technology Co., Ltd",
+        companyName: "Human resource management system",
       },
       sidebar: {
         dashboard: "Dashboard",
@@ -40,7 +40,7 @@ const i18n = new VueI18n({
         hello: "你好, 世界",
       },
       navbar: {
-        companyName: "江苏传智播客教育科技股份有限公司",
+        companyName: "人力资源管理系统",
       },
       sidebar: {
         dashboard: "首页",

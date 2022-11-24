@@ -179,7 +179,12 @@ export default {
       },
       rolesList: [], // 角色列表
       total: 0, // 角色数据总条数
-      companyInfo: {},
+      companyInfo: {
+        name: "人力资源管理系统",
+        companyAddress: "xxxxxxx",
+        mailbox: "2668640009@qq.com",
+        remarks: "xxxxxxx",
+      },
       showDialog: false, // 控制弹框的隐藏和展示
       // 添加角色
       roleForm: {
@@ -206,7 +211,7 @@ export default {
     // 获取所有角色列表
     this.getRoleListFn();
     // 获取公司详情
-    this.getCompanyInfoFn();
+    // this.getCompanyInfoFn();
     // 获取权限列表
     this.getPermissionListFn();
   },
