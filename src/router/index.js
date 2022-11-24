@@ -52,11 +52,11 @@ export const constantRoutes = [
       },
     ],
   },
-  {
-    path: "*",
-    redirect: "/404",
-    hidden: true,
-  },
+  // {
+  //   path: "*",
+  //   redirect: "/404",
+  //   hidden: true,
+  // },
   {
     path: "/excel",
     component: Layout,
@@ -75,7 +75,8 @@ const createRouter = () =>
     scrollBehavior: () => ({
       y: 0,
     }),
-    routes: [...constantRoutes, ...asyncRoutes],
+    // routes: [...constantRoutes, ...asyncRoutes],
+    routes: [...constantRoutes],
   });
 
 const router = createRouter();

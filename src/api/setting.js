@@ -2,8 +2,7 @@ import request from "@/utils/request";
 
 /**
  * 请求所有角色列表
- * @param {*} page 页码
- * @param {*} pageSize 条数
+ * @param {*} params {page: 页码, size: 每页条数}
  * @returns Promise对象
  */
 export const getRoleListAPI = (params) =>
@@ -56,8 +55,26 @@ export const editRoleAPI = (roleObj) =>
     data: roleObj,
   });
 
+/**
+ * 删除角色
+ * @param {*} roleId 角色id
+ * @returns Promise对象
+ */
 export const delRoleAPI = (roleId) =>
   request({
     url: `/sys/role/${roleId}`,
     method: "delete",
   });
+
+/**
+ * 给角色分配权限
+ * @param {*} data {id:角色id, permIds:[] 所有选中的节点的id组成的数组}
+ * @returns Promise对象
+ */
+export function assignPermAPI(data) {
+  return request({
+    url: "/sys/role/assignPrem",
+    method: "put",
+    data,
+  });
+}

@@ -6,7 +6,7 @@ export default {
     {
       path: "",
       name: "Approvals",
-      component: () => import("@/views/approvals"), 
+      component: () => import("@/views/approvals"),
       meta: { title: "审批", icon: "tree-table" },
     },
   ],

@@ -49,7 +49,9 @@ export default {
   computed: {
     ...mapGetters(["sidebar"]),
     routes() {
-      return this.$router.options.routes;
+      // return this.$router.options.routes;
+      console.log(this.$store.state.permission.routes);
+      return this.$store.state.permission.routes;
     },
     // 设置默认菜单激活的path值
     activeMenu() {

@@ -46,12 +46,15 @@ const actions = {
     const res = await getUserInfoAPI();
     const res2 = await getUserPhotoAPI(res.data.userId);
     commit("SET_USER", { ...res.data, ...res2.data });
+    return res.data.roles.menus; //返回页面权限点英文字符串数组
   },
 
   // 封装-退出登录逻辑
   logoutActions({ commit }) {
     commit("REMOVE_TOKEN");
     commit("REMOVE_USER");
+    // 重置路由
+    resetRouter();
   },
 };
 

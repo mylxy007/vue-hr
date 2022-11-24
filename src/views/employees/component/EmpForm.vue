@@ -162,7 +162,7 @@ export default {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
           console.log(this.formData);
-          this.$emit("addEmpEv", this.formData);
+          this.$emit("addEmpEv", { ...this.formData });
         }
       });
     },

@@ -20,6 +20,7 @@ export default {
     // 参数2：context 如果组件是一个函数组件，为没有实例(this)的函数组件提供上下文信息
     // 上下文：运行时环境对象(this)
     const { icon, title } = context.props;
+    const that = context.parent; //拿到父级vue组件对象(this值)
     const vnodes = [];
 
     if (icon) {
@@ -29,9 +30,12 @@ export default {
         vnodes.push(<svg-icon icon-class={icon} />);
       }
     }
+    console.log(title);
 
     if (title) {
-      vnodes.push(<span slot="title">{title}</span>);
+      vnodes.push(
+        <span slot="title">{that.$t(`sidebar.${title.toLowerCase()}`)}</span>
+      );
     }
     return vnodes;
     // 返回方式1：

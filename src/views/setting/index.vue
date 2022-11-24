@@ -26,7 +26,7 @@
                   <el-button
                     size="small"
                     type="success"
-                    @click="setRoles(scope.row)"
+                    @click="setRoles(scope.row.id)"
                     >分配权限</el-button
                   >
                   <el-button
@@ -134,11 +134,28 @@
           </el-col>
         </el-row>
       </el-dialog>
+      <!-- 分配权限弹框 -->
+      <el-dialog
+        title="分配权限"
+        :visible.sync="showPerDialog"
+        width="50%"
+        @close="perDialogCloseFn"
+      >
+        <assign-permission
+          :role-id="roleId"
+          :showDialog.sync="showPerDialog"
+          :permissionList="permissionList"
+          :permissionIds="permissionIds"
+          @updatePermissionFn="updatePermissionFn"
+        />
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import AssignPermission from "./assignPermission.vue";
+import { transTree } from "@/utils";
 import {
   getRoleListAPI,
   getCompanyInfoAPI,
@@ -146,9 +163,13 @@ import {
   getRoleDetailAPI,
   editRoleAPI,
   delRoleAPI,
+  getPermissionListAPI,
+  assignPermAPI,
 } from "@/api";
-import { logger } from "runjs/lib/common";
 export default {
+  components: {
+    AssignPermission,
+  },
   data() {
     return {
       activeName: "first",
@@ -175,13 +196,27 @@ export default {
         ],
       },
       isEdit: false,
+      showPerDialog: false, //分配权限弹窗控制
+      roleId: "", //当前点击的角色id
+      permissionList: [], //权限列表数组
+      permissionIds: [], //角色权限id数组
     };
   },
   created() {
+    // 获取所有角色列表
     this.getRoleListFn();
+    // 获取公司详情
     this.getCompanyInfoFn();
+    // 获取权限列表
+    this.getPermissionListFn();
   },
   methods: {
+    // 获取权限列表
+    async getPermissionListFn() {
+      const res = await getPermissionListAPI();
+      this.permissionList = transTree(res.data, "0");
+      console.log(this.permissionList);
+    },
     // 获取所有角色列表
     async getRoleListFn() {
       const res = await getRoleListAPI(this.query);
@@ -210,9 +245,19 @@ export default {
       this.isEdit = false;
       this.showDialog = true;
     },
-    // 设置角色
-    setRoles() {},
-
+    // 分配权限按钮点击事件
+    async setRoles(roleId) {
+      const res = await getRoleDetailAPI(roleId);
+      this.permissionIds = res.data.permIds;
+      this.showPerDialog = true;
+      this.roleId = roleId;
+    },
+    // 更新角色权限
+    async updatePermissionFn(permIds) {
+      const res = await assignPermAPI({ id: this.roleId, permIds });
+      if (!res.success) return this.$message.error(res.message);
+      this.$message.success(res.message);
+    },
     // 编辑角色
     async editRoles(roleObj) {
       const res = await getRoleDetailAPI(roleObj.id);
@@ -275,6 +320,10 @@ export default {
       //   description: "",
       // };
       this.$refs.roleForm.resetFields();
+    },
+    // 分配权限弹窗关闭回调
+    perDialogCloseFn() {
+      this.permissionIds = [];
     },
   },
 };

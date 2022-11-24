@@ -5,15 +5,23 @@
       <page-tools>
         <!-- 自定义左侧内容 -->
         <template #slot-left>
-          <span>共 19 条记录</span>
+          <span>共 {{ total }} 条记录</span>
         </template>
 
         <!-- 自定义右侧内容 -->
         <template #slot-right>
-          <el-button type="danger" size="small" @click="uploadBtnFn"
+          <el-button
+            v-power="'import'"
+            type="danger"
+            size="small"
+            @click="uploadBtnFn"
             >导入excel</el-button
           >
-          <el-button type="success" size="small" @click="exportBtnFn"
+          <el-button
+            v-power="'export'"
+            type="success"
+            size="small"
+            @click="exportBtnFn"
             >导出excel</el-button
           >
           <el-button type="primary" size="small" @click="addEmployeeFn"
@@ -56,7 +64,12 @@
                 @click="lookDetailFn(row.id, row.formOfEmployment)"
                 >查看</el-button
               >
-              <el-button type="text" size="small">分配角色</el-button>
+              <el-button
+                type="text"
+                size="small"
+                @click="assginRoleBtnFn(row.id)"
+                >分配角色</el-button
+              >
               <el-button type="text" size="small" @click="delEmpFn(row.id)"
                 >删除</el-button
               >
@@ -77,6 +90,7 @@
           />
         </el-row>
       </el-card>
+      <!-- 新增角色员工弹窗 -->
       <el-dialog
         title="新增员工"
         :visible.sync="showDialog"
@@ -89,6 +103,16 @@
           :treeData="treeData"
         ></emp-form>
       </el-dialog>
+      <!-- 员工-分配角色权限 - 弹窗 -->
+      <el-dialog title="分配角色" :visible.sync="showRoleDialog">
+        <!-- 设置角色组件 -->
+        <assign-role
+          :show.sync="showRoleDialog"
+          :roleList="roleList"
+          ref="assignRoleDialog"
+          @addRoleEV="addRoleFn"
+        />
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -98,15 +122,20 @@ import {
   getDepartmentsListAPI,
   addEmployeesAPI,
   delEmployeeAPI,
+  getRoleListAPI,
+  getUserPhotoAPI,
+  saveEmployeesRoleAPI,
 } from "@/api";
 import { transTree } from "@/utils";
 import Employees from "@/api/constant";
 import dayjs from "dayjs";
 import EmpForm from "./component/EmpForm";
+import AssignRole from "./component/assignRoleDialog";
 export default {
   name: "Employees",
   components: {
     EmpForm,
+    AssignRole,
   },
   data() {
     return {
@@ -117,16 +146,29 @@ export default {
       employeesList: [], // 员工列表
       total: 0, // 数据总条数
       showDialog: false, //新增员工弹框
-      treeData: [],
-      allEmployeeList: [],
+      treeData: [], //部门列表（树形结构）
+      allEmployeeList: [], //所有员工列表
+      showRoleDialog: false, //分配员工角色弹窗控制
+      roleList: [], //角色列表
+      clickEmpId: "",
     };
   },
   created() {
     this.getEmployeesListFn();
     this.getDepartmentsFn();
     this.getAllEmployeeListFn();
+    this.getRoleListFn();
   },
   methods: {
+    // 获取所有角色列表
+    async getRoleListFn() {
+      const res = await getRoleListAPI();
+      const allRes = await getRoleListAPI({
+        page: 1,
+        pagesize: res.data.total,
+      });
+      this.roleList = allRes.data.rows;
+    },
     // 表格聘用字段格式化
     formatter(row, column, cellValue, index) {
       const obj = Employees.hireType.find((item) => item.id == cellValue);
@@ -279,6 +321,23 @@ export default {
           bookType: "xlsx",
         });
       });
+    },
+    // 分配角色按钮点击事件
+    async assginRoleBtnFn(empId) {
+      // 通过员工id，获取员工角色信息
+      const res = await getUserPhotoAPI(empId);
+      this.showRoleDialog = true;
+      this.clickEmpId = empId;
+      this.$nextTick(() => {
+        this.$refs.assignRoleDialog.roleIdList = res.data.roleIds || [];
+      });
+    },
+    // 更新权限
+    async addRoleFn(roleIds) {
+      const res = await saveEmployeesRoleAPI({ id: this.clickEmpId, roleIds });
+      console.log(res);
+      if (!res.success) return this.$message.error(res.message);
+      this.$message.success(res.message);
     },
   },
 };

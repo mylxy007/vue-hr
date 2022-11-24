@@ -23,12 +23,10 @@
 </template>
 
 <script>
-import UploadExcelComponent from "@/components/UploadExcel/index.vue";
 import { importEmployeeAPI } from "@/api";
 import { formatExcelDate } from "@/utils";
 export default {
   name: "UploadExcel",
-  components: { UploadExcelComponent },
   data() {
     return {
       tableData: [],

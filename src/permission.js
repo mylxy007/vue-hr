@@ -1,4 +1,4 @@
-import router from "./router";
+import router, { asyncRoutes } from "./router";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import store from "@/store";
@@ -20,7 +20,27 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next();
       if (!store.getters.name) {
-        store.dispatch("user/getUserInfoActions");
+        const menus = await store.dispatch("user/getUserInfoActions");
+        console.log(menus);
+        // 用menus权限点英文字符串和路由规则对象name匹配
+        // 把所有准备好的8个路由规则对象取出，看看名字和menus是否匹配，匹配就证明
+        // 此登录的用户有这个页面的访问权限，让filter收集此路由规则对象到新数组中
+        const filterList = asyncRoutes.filter((routeObj) => {
+          const routeName = routeObj.children[0].name.toLowerCase();
+          return menus.includes(routeName);
+        });
+        filterList.push({
+          path: "*",
+          redirect: "/404",
+          hidden: true,
+        });
+        router.addRoutes(filterList);
+        store.commit("permission/SETROUTES", filterList);
+        // 路由再跳转一次，因为上面next()会导致白屏(因为放行时，动态路由还没有加入到内存中 )
+        next({
+          path: to.path,
+          replace: true, //不让回退，类似this.$router.replace();
+        });
       }
     }
   } else {

@@ -47,3 +47,15 @@ export const updateEmployeesAPI = (data) =>
     method: "put",
     data,
   });
+
+/**
+ * 给员工分配保存角色
+ * @param {*} data {id: 员工id, roleIds: 角色id数据}
+ * @returns
+ */
+export const saveEmployeesRoleAPI = (data) =>
+  request({
+    url: "/sys/user/assignRoles",
+    method: "put",
+    data,
+  });
