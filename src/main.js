@@ -1,6 +1,6 @@
 import Vue from "vue";
 import "normalize.css/normalize.css"; // 清除默认css样式的包
-import ElementUI from "element-ui";
+import ELEMENT from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "@/styles/index.scss"; // 全局css
 
@@ -21,7 +21,7 @@ import i18n from "@/lang";
 //   locale,
 // });
 // 中文版 elment-ui
-Vue.use(ElementUI);
+Vue.use(ELEMENT);
 Vue.config.productionTip = false;
 
 new Vue({
